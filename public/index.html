@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List of Files</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            animation: fadeInDown 1s ease;
+        }
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 15px;
+            animation: fadeInUp 1s ease forwards;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        a {
+            text-decoration: none;
+            color: #007bff;
+            transition: color 0.3s ease;
+        }
+        a:hover {
+            color: #0056b3;
+        }
+        .mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+            color: #333;
+            transition: color 0.3s ease;
+        }
+        .mode-toggle:hover {
+            color: #0056b3;
+        }
+        .dark-mode {
+            background-color: #333;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <button class="mode-toggle" id="modeToggle"><i class="fas fa-moon"></i></button>
+    <input type="file" id="datasetInput">
+    <button id="uploadButton">Upload Dataset</button>
+    <div class="container">
+        <h1>List of Files <i class="fas fa-file-alt"></i></h1>
+        <ul id="fileList"></ul>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const modeToggle = document.getElementById('modeToggle');
+            const body = document.body;
+
+            modeToggle.addEventListener('click', () => {
+                body.classList.toggle('dark-mode');
+                const icon = modeToggle.querySelector('i');
+                if (body.classList.contains('dark-mode')) {
+                    icon.classList.remove('fa-moon');
+                    icon.classList.add('fa-sun');
+                } else {
+                    icon.classList.remove('fa-sun');
+                    icon.classList.add('fa-moon');
+                }
+            });
+
+            fetch('/files')
+                .then(response => response.json())
+                .then(files => {
+                    const fileList = document.getElementById('fileList');
+                    files.forEach(file => {
+                        const listItem = document.createElement('li');
+                        const link = document.createElement('a');
+                        link.href = `/download/${file._id}`;
+                        link.textContent = file.filename;
+                        listItem.appendChild(link);
+
+                        const deleteButton = document.createElement('button');
+                        deleteButton.className = 'deleteButton';
+                        deleteButton.dataset.id = file._id;
+                        deleteButton.textContent = 'Delete';
+                        listItem.appendChild(deleteButton);
+
+                        fileList.appendChild(listItem);
+                    });
+
+                    // Add event listeners to delete buttons
+                    document.querySelectorAll('.deleteButton').forEach(button => {
+                        button.addEventListener('click', async () => {
+                            const fileId = button.dataset.id;
+
+                            try {
+                                const response = await fetch(`/delete/${fileId}`, {
+                                    method: 'DELETE'
+                                });
+
+                                if (response.ok) {
+                                    alert('File deleted successfully');
+                                    // Optionally remove the deleted file from the UI
+                                    button.closest('li').remove();
+                                } else {
+                                    throw new Error('Failed to delete file');
+                                }
+                            } catch (error) {
+                                console.error('Error:', error);
+                                alert('Failed to delete file');
+                            }
+                        });
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to retrieve file list');
+                });
+
+            document.getElementById('uploadButton').addEventListener('click', async () => {
+                try {
+                    const datasetInput = document.getElementById('datasetInput');
+                    const file = datasetInput.files[0];
+
+                    if (!file) {
+                        throw new Error('No file selected');
+                    }
+
+                    const formData = new FormData();
+                    formData.append('dataset', file);
+
+                    const response = await fetch('/upload', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        alert('Dataset uploaded successfully');
+                    } else {
+                        throw new Error('Failed to upload dataset');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Failed to upload dataset');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
