@@ -80,7 +80,7 @@ app.post('/upload', upload.single('dataset'), async (req, res) => {
         });
 
         uploadStream.on('finish', () => {
-            fs.unlinkSync(filepath); // Delete the temporary file after upload
+            fs.unlinkSync(filepath);
             res.sendStatus(200);
         });
 
