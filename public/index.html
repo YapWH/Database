@@ -17,18 +17,23 @@
     <button class="mode-toggle" id="modeToggle"><i class="fas fa-moon"></i></button>
     <button id="uploadButton">Upload Dataset</button>
 
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Search...">
+        <button id="searchButton"><i class="fas fa-search"></i></button>
+    </div>
+
     <div id="uploadModal" class="modal">
         <div class="modal-content">
             <span class="close-button">&times;</span>
-            <h2>Upload File</h2>
+            <h2 class="black-label">Upload File</h2>
             <form id="uploadForm" enctype="multipart/form-data"> <!-- Add the form element with the id uploadForm -->
-                <label for="authorInput">Author:</label>
+                <label for="authorInput" class="black-label">Author:</label>
                 <input type="text" id="authorInput" placeholder="Enter author name">
                 <br>
-                <label for="descriptionInput">Description:</label>
+                <label for="descriptionInput" class="black-label">Description:</label>
                 <textarea id="descriptionInput" placeholder="Enter file description"></textarea>
                 <br>
-                <input type="file" id="datasetInput">
+                <input type="file" id="datasetInput" class="black-label">
                 <button type="submit" id="confirmUploadButton">Upload Dataset</button>
             </form>
         </div>
@@ -52,6 +57,8 @@
             const closeButton = document.querySelector('.close-button');
             const uploadForm = document.getElementById('uploadForm');
             const body = document.body;
+            const container = document.querySelector('.container');
+            const fileListTitle = document.querySelector('h1');
 
             modalButton.onclick = () => {
                 modal.style.display = 'block';
@@ -73,6 +80,8 @@
 
             modeToggle.addEventListener('click', () => {
                 body.classList.toggle('dark-mode');
+                container.classList.toggle('dark-mode-title');
+                fileListTitle.classList.toggle('dark-mode-title');
                 const icon = modeToggle.querySelector('i');
                 if (body.classList.contains('dark-mode')) {
                     icon.classList.remove('fa-moon');
@@ -117,7 +126,6 @@
                                 if (response.ok) {
                                     console.log('File deleted successfully');
                                     alert('File deleted successfully');
-                                    button.closest('li').remove();
                                     refreshPage();
                                 } else {
                                     throw new Error('Failed to delete file');
@@ -125,6 +133,7 @@
                             } catch (error) {
                                 console.error('Error:', error);
                                 alert('Failed to delete file');
+                                refreshPage();
                             }
                         });
                     });
