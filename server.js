@@ -102,7 +102,7 @@ app.delete('/delete/:id', async (req, res) => {
         }
 
         // Delete the file from the database
-        await db.collection('fs.files').deleteOne({ _id: new ObjectId(fileId) });
+        //await db.collection('fs.files').deleteOne({ _id: new ObjectId(fileId) });
         await bucket.delete(new ObjectId(fileId)); // Optionally delete from GridFS
 
         res.status(200).send('File deleted successfully');
