@@ -11,7 +11,7 @@
 
 <body>
     <button class="mode-toggle" id="modeToggle"><i class="fas fa-moon"></i></button>
-    <button onclick="openAdminPage()">Go to Admin Page</button>
+    <button id="adminButton" onclick="openAdminPage()">Go to Admin Page</button>
     <button id="uploadButton">Upload Dataset</button>
 
     <div class="search-container">
@@ -36,6 +36,13 @@
         </div>
     </div>
     
+    <div id="fileDetailsModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeFileDetailsModal()">&times;</span>
+            <h2 class="black-label">File Details</h2>
+            <div id="fileDetailsContent"></div>
+        </div>
+    </div>
 
     <div class="container">
         <h1>List of Files <i class="fas fa-file-alt"></i></h1>
@@ -150,7 +157,7 @@
                             });
                             listItem.appendChild(viewButton);
 
-                            fileListContainer.appendChild(listItem);
+                            fileList.appendChild(listItem);
                         });
 
                         // Display pagination controls if necessary
