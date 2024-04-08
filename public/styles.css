@@ -96,6 +96,9 @@ a:hover {
 }
 
 #adminButton {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
     background-color: #007bff; 
     color: #fff;
     padding: 10px 20px;
@@ -187,6 +190,17 @@ a:hover {
 }
 
 #uploadForm button:hover {
+    background-color: #0056b3;
+}
+
+#download button {
+    background-color: #007bff;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+}
+
+#download button:hover {
     background-color: #0056b3;
 }
 
