@@ -40,7 +40,7 @@
         <div class="modal-content">
             <span class="close-button" onclick="closeFileDetailsModal()">&times;</span>
             <h2 class="black-label">File Details</h2>
-            <form id="fileDetails" enctype="multipart/form-data"></form>
+            <form id="fileDetails" enctype="multipart/form-data">
                 <div id="fileDetailsContent"></div>
                 <button type="submit" id="download">Download Dataset</button>
             </form>
@@ -81,6 +81,8 @@
             const fileListContainer = document.getElementById('fileList');
             const downloadButton = document.getElementById('download');
             const fileDetailsModal = document.getElementById('fileDetailsModal');
+            const viewButton = document.getElementById('viewButton');
+            const fileDetails = document.getElementById('fileDetails');
 
             modalButton.onclick = () => {
                 uploadModal.style.display = 'block';
@@ -112,6 +114,10 @@
                     icon.classList.remove('fa-sun');
                     icon.classList.add('fa-moon');
                 }
+            });
+
+            fileDetails.addEventListener('submit', () => {
+                fileDetailsModal.style.display = 'none';
             });
 
             // Function to display file details modal
