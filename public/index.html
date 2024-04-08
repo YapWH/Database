@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 
-
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,10 +9,9 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 
-
-
 <body>
     <button class="mode-toggle" id="modeToggle"><i class="fas fa-moon"></i></button>
+    <button onclick="openAdminPage()">Go to Admin Page</button>
     <button id="uploadButton">Upload Dataset</button>
 
     <div class="search-container">
@@ -50,6 +47,18 @@
             window.location.reload();
         }
 
+        function openAdminPage() {
+            window.location.href = '../admin/index.html';
+        }
+
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(event) {
+                event.preventDefault();
+                const page = this.getAttribute('href');
+                loadPage(page);
+            });
+        });
+
         document.addEventListener('DOMContentLoaded', () => {
             const modeToggle = document.getElementById('modeToggle');
             const modal = document.getElementById('uploadModal');
@@ -59,6 +68,7 @@
             const body = document.body;
             const container = document.querySelector('.container');
             const fileListTitle = document.querySelector('h1');
+            const fileListContainer = document.getElementById('fileList');
 
             modalButton.onclick = () => {
                 modal.style.display = 'block';
@@ -92,94 +102,97 @@
                 }
             });
 
+            // Function to display file details modal
+            function viewFileDetails(file) {
+                // Construct modal content
+                const modalContent = `
+                    <span class="close-button">&times;</span>
+                    <h2 class="black-label">File Details</h2>
+                    <p><strong>Author:</strong> ${file.author}</p>
+                    <p><strong>Description:</strong> ${file.description}</p>
+                    <p><strong>File Size:</strong> ${file.size} KB</p>
+                    <button onclick="window.location.href='/download/${file._id}'">Download</button>
+                `;
+                modal.innerHTML = modalContent;
+                modal.style.display = 'block';
+
+                // Close modal when close button is clicked
+                modal.querySelector('.close-button').addEventListener('click', () => {
+                    modal.style.display = 'none';
+                });
+            }
+
+            // Fetch files from server
             fetch('/files')
                 .then(response => response.json())
                 .then(files => {
-                    const fileList = document.getElementById('fileList');
-                    files.forEach(file => {
-                        const listItem = document.createElement('li');
-                        const link = document.createElement('a');
-                        link.href = `/download/${file._id}`;
-                        link.textContent = file.filename;
-                        listItem.appendChild(link);
+                    // Display files in pagination
+                    const filesPerPage = 50;
+                    let currentPage = 1;
 
-                        const deleteButton = document.createElement('button');
-                        deleteButton.className = 'deleteButton';
-                        deleteButton.dataset.id = file._id;
-                        deleteButton.textContent = 'Delete';
-                        listItem.appendChild(deleteButton);
+                    function displayFiles(page) {
+                        fileListContainer.innerHTML = ''; // Clear existing files
+                        const startIndex = (page - 1) * filesPerPage;
+                        const endIndex = startIndex + filesPerPage;
+                        const pageFiles = files.slice(startIndex, endIndex);
 
-                        fileList.appendChild(listItem);
-                    });
+                        pageFiles.forEach(file => {
+                            const listItem = document.createElement('li');
+                            const link = document.createElement('a');
+                            link.href = `/download/${file._id}`;
+                            link.textContent = file.filename;
+                            listItem.appendChild(link);
 
-                    document.querySelectorAll('.deleteButton').forEach(button => {
-                        button.addEventListener('click', async () => {
-                            const fileId = button.dataset.id;
+                            const viewButton = document.createElement('button');
+                            viewButton.textContent = 'View';
+                            viewButton.addEventListener('click', () => {
+                                viewFileDetails(file);
+                            });
+                            listItem.appendChild(viewButton);
 
-                            try {
-                                console.log('Deleting file:', fileId)
-
-                                const response = await fetch(`/delete/${fileId}`, {
-                                    method: 'DELETE'
-                                });
-
-                                if (response.ok) {
-                                    console.log('File deleted successfully');
-                                    alert('File deleted successfully');
-                                    refreshPage();
-                                } else {
-                                    throw new Error('Failed to delete file');
-                                }
-                            } catch (error) {
-                                console.error('Error:', error);
-                                alert('Failed to delete file');
-                                refreshPage();
-                            }
+                            fileListContainer.appendChild(listItem);
                         });
-                    });
+
+                        // Display pagination controls if necessary
+                        const totalPages = Math.ceil(files.length / filesPerPage);
+                        if (totalPages > 1) {
+                            const paginationControls = document.createElement('div');
+                            paginationControls.classList.add('pagination');
+
+                            if (currentPage > 1) {
+                                const prevButton = document.createElement('button');
+                                prevButton.textContent = 'Previous';
+                                prevButton.addEventListener('click', () => {
+                                    currentPage--;
+                                    displayFiles(currentPage);
+                                });
+                                paginationControls.appendChild(prevButton);
+                            }
+
+                            const pageInfo = document.createElement('span');
+                            pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+                            paginationControls.appendChild(pageInfo);
+
+                            if (currentPage < totalPages) {
+                                const nextButton = document.createElement('button');
+                                nextButton.textContent = 'Next';
+                                nextButton.addEventListener('click', () => {
+                                    currentPage++;
+                                    displayFiles(currentPage);
+                                });
+                                paginationControls.appendChild(nextButton);
+                            }
+
+                            fileListContainer.appendChild(paginationControls);
+                        }
+                    }
+
+                    displayFiles(currentPage);
                 })
                 .catch(error => {
                     console.error('Error:', error);
                     alert('Failed to retrieve file list');
                 });
-            
-
-                
-                uploadForm.addEventListener('submit', async (event) => {
-                    event.preventDefault(); // Prevent default form submission
-                    try {
-                        const datasetInput = document.getElementById('datasetInput');
-                        const file = datasetInput.files[0];
-
-                        if (!file) {
-                            throw new Error('No file selected');
-                        }
-
-                        const formData = new FormData();
-                        formData.append('dataset', file);
-
-                        // Logging the file name to check its encoding
-                        console.log('File Name:', file.name);
-
-                        const response = await fetch('/upload', {
-                            method: 'POST',
-                            body: formData
-                        });
-
-                        if (response.ok) {
-                            alert('Dataset uploaded successfully');
-                            refreshPage();
-                        } else {
-                            throw new Error('Failed to upload dataset');
-                        }
-                    } catch (error) {
-                        console.error('Error:', error);
-                        alert('Failed to upload dataset');
-                    } finally {
-                        modal.style.display = 'none'; // Close the modal regardless of success or failure
-                    }
-                });
         });
     </script>
-</body>
-</html>
+</body></html>
