@@ -193,22 +193,19 @@ a:hover {
     background-color: #0056b3;
 }
 
-#fileDetailsModal .modal-content {
-    background-color: #fefefe;
-    margin: 10% auto; 
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
+#fileDetails label {
+    display: block;
+    margin-bottom: 5px;
 }
-
-#download button {
+#fileDetails textarea,
+#fileDetails button {
     background-color: #007bff;
     border: none;
     color: #fff;
     cursor: pointer;
 }
 
-#download button:hover {
+#fileDetails button:hover {
     background-color: #0056b3;
 }
 
