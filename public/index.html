@@ -153,12 +153,9 @@
                             link.textContent = file.filename;
                             listItem.appendChild(link);
 
-                            const viewButton = document.createElement('button');
-                            viewButton.textContent = 'View';
-                            viewButton.addEventListener('click', () => {
-                                viewFileDetails(file);
-                            });
-                            listItem.appendChild(viewButton);
+                            listItem.addEventListener('click', () => {
+                            viewFileDetails(file);
+                        });
 
                             fileListContainer.appendChild(listItem);
                         });
