@@ -148,17 +148,18 @@
 
                         pageFiles.forEach(file => {
                             const listItem = document.createElement('li');
-                            const fileName = document.createElement('span');
-                            fileName.textContent = file.filename;
-                            listItem.appendChild(fileName);
+                            const fileNameLink = document.createElement('a'); 
+                            fileNameLink.textContent = file.filename;
+                            fileNameLink.href = '#';
+                            listItem.appendChild(fileNameLink);
                             fileListContainer.appendChild(listItem);
-                            
-                            listItem.addEventListener('click', () => {
+
+                            fileNameLink.addEventListener('click', (event) => {
+                                event.preventDefault();
                                 viewFileDetails(file);
                             });
                         });
 
-                        // Display pagination controls if necessary
                         const totalPages = Math.ceil(files.length / filesPerPage);
                         if (totalPages > 1) {
                             const paginationControls = document.createElement('div');
