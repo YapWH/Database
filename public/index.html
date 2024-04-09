@@ -79,7 +79,6 @@
             const container = document.querySelector('.container');
             const fileListTitle = document.querySelector('h1');
             const fileListContainer = document.getElementById('fileList');
-            const fileDetailsModal = document.getElementById('fileDetailsModal');
 
             modalButton.onclick = () => {
                 uploadModal.style.display = 'block';
@@ -115,6 +114,8 @@
 
             // Function to display file details modal
             function viewFileDetails(file) {
+                const fileDetailsModal = document.createElement('div');
+                fileDetailsModal.classList.add('file-details-modal');
                 const modalContent = `
                     <span class="close-button">&times;</span>
                     <h2 class="black-label">File Details</h2>
@@ -124,11 +125,10 @@
                     <button onclick="window.location.href='/download/${file._id}'">Download</button>
                 `;
                 fileDetailsModal.innerHTML = modalContent;
-                fileDetailsModal.style.display = 'block';
+                document.body.appendChild(fileDetailsModal);
 
-                // Close modal when close button is clicked
                 fileDetailsModal.querySelector('.close-button').addEventListener('click', () => {
-                    fileDetailsModal.style.display = 'none';
+                    document.body.removeChild(fileDetailsModal);
                 });
             }
 

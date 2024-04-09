@@ -209,20 +209,44 @@ a:hover {
     background-color: #0056b3;
 }
 
-#fileDetails label {
-    display: block;
-    margin-bottom: 5px;
+.file-details-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
-#fileDetails textarea,
-#fileDetails button {
-    background-color: #007bff;
-    border: none;
-    color: #fff;
+
+.file-details-modal .close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
     cursor: pointer;
 }
 
-#fileDetails button:hover {
+.file-details-modal .black-label {
+    color: #000;
+}
+
+.file-details-modal .view-button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.file-details-modal .view-button:hover {
     background-color: #0056b3;
+}
+
+.file-details-modal .file-description {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 10px;
 }
 
 .dark-mode-title {
