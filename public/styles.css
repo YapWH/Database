@@ -209,7 +209,7 @@ a:hover {
     cursor: pointer; 
 }
 
-.file-list li:hover a {
+.file-list li:hover span {
     color: #007bff; 
 }
 

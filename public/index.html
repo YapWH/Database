@@ -148,14 +148,14 @@
 
                         pageFiles.forEach(file => {
                             const listItem = document.createElement('li');
-                            listItem.textContent = file.filename; 
+                            const fileName = document.createElement('span');
+                            fileName.textContent = file.filename;
+                            listItem.appendChild(fileName);
                             fileListContainer.appendChild(listItem);
                             
                             listItem.addEventListener('click', () => {
                                 viewFileDetails(file);
-                        });
-
-                            fileListContainer.appendChild(listItem);
+                            });
                         });
 
                         // Display pagination controls if necessary
