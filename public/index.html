@@ -148,13 +148,11 @@
 
                         pageFiles.forEach(file => {
                             const listItem = document.createElement('li');
-                            const link = document.createElement('a');
-                            link.href = `/download/${file._id}`;
-                            link.textContent = file.filename;
-                            listItem.appendChild(link);
-
+                            listItem.textContent = file.filename; 
+                            fileListContainer.appendChild(listItem);
+                            
                             listItem.addEventListener('click', () => {
-                            viewFileDetails(file);
+                                viewFileDetails(file);
                         });
 
                             fileListContainer.appendChild(listItem);

@@ -231,7 +231,7 @@ a:hover {
     color: #000;
 }
 
-.file-details-modal .download button {
+.file-details-modal button {
     background-color: #007bff;
     color: #fff;
     padding: 5px 10px;
@@ -239,7 +239,7 @@ a:hover {
     cursor: pointer;
 }
 
-.file-details-modal .download button:hover {
+.file-details-modal button:hover {
     background-color: #0056b3;
 }
 
