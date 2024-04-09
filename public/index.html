@@ -23,7 +23,7 @@
         <div class="modal-content">
             <span class="close-button">&times;</span>
             <h2 class="black-label">Upload File</h2>
-            <form id="uploadForm" enctype="multipart/form-data"> <!-- Add the form element with the id uploadForm -->
+            <form id="uploadForm" enctype="multipart/form-data">
                 <label for="authorInput" class="black-label">Author:</label>
                 <input type="text" id="authorInput" placeholder="Enter author name">
                 <br>
@@ -35,7 +35,7 @@
             </form>
         </div>
     </div>
-    
+
     <div id="fileDetailsModal" class="modal">
         <div class="modal-content">
             <span class="close-button" onclick="closeFileDetailsModal()">&times;</span>
@@ -62,7 +62,7 @@
         }
 
         document.querySelectorAll('nav a').forEach(anchor => {
-            anchor.addEventListener('click', function(event) {
+            anchor.addEventListener('click', function (event) {
                 event.preventDefault();
                 const page = this.getAttribute('href');
                 loadPage(page);
@@ -79,10 +79,7 @@
             const container = document.querySelector('.container');
             const fileListTitle = document.querySelector('h1');
             const fileListContainer = document.getElementById('fileList');
-            const downloadButton = document.getElementById('download');
             const fileDetailsModal = document.getElementById('fileDetailsModal');
-            const viewButton = document.getElementById('viewButton');
-            const fileDetails = document.getElementById('fileDetails');
 
             modalButton.onclick = () => {
                 uploadModal.style.display = 'block';
@@ -114,10 +111,6 @@
                     icon.classList.remove('fa-sun');
                     icon.classList.add('fa-moon');
                 }
-            });
-
-            fileDetails.addEventListener('submit', () => {
-                fileDetailsModal.style.display = 'none';
             });
 
             // Function to display file details modal
@@ -213,4 +206,6 @@
         });
 
     </script>
-</body></html>
+</body>
+
+</html>
