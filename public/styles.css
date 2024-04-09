@@ -220,6 +220,15 @@ a:hover {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
+.file-list li:hover {
+    background-color: #f0f0f0; 
+    cursor: pointer; 
+}
+
+.file-list li:hover a {
+    color: #007bff; 
+}
+
 .file-details-modal .close-button {
     position: absolute;
     top: 10px;
