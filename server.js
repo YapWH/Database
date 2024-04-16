@@ -75,6 +75,10 @@ app.post('/upload', upload.single('dataset'), async (req, res) => {
         const bucket = new GridFSBucket(db);
         const filename = req.file.originalname;
         const filepath = req.file.path;
+        const filedescription = req.body.filedescription;
+        const fileauthor = req.body.fileauthor;
+        const filedate = req.body.filedate;
+        const filetags = req.body.filetags;
 
         const uploadStream = bucket.openUploadStream(filename);
         const fileStream = fs.createReadStream(filepath);
@@ -92,7 +96,7 @@ app.post('/upload', upload.single('dataset'), async (req, res) => {
 
     } catch (error) {
         console.error('Error:', error);
-        res.status(500).send('Failed to upload dataset');
+        res.status(500).send('Failed to upload file');
     }
 });
 
@@ -109,8 +113,7 @@ app.delete('/delete/:id', async (req, res) => {
         }
 
         // Delete the file from the database
-        //await db.collection('fs.files').deleteOne({ _id: new ObjectId(fileId) });
-        await bucket.delete(new ObjectId(fileId)); // Optionally delete from GridFS
+        await bucket.delete(new ObjectId(fileId));
 
         res.status(200).send('File deleted successfully');
     } catch (error) {
