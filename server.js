@@ -15,18 +15,22 @@ const dbName = 'exp';
 
 let db;
 
+// Connect to MongoDB
 async function connectToDatabase() {
     const client = new MongoClient(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
     await client.connect();
     db = client.db(dbName);
 }
 
+// Serve static files
 app.use(express.static('public'));
 
+// Routessub
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    res.sendFile(path.join(__dirname, 'public', 'public.html'));
 });
 
+// Get list of files
 app.get('/files', async (req, res) => {
     try {
         const files = await db.collection('fs.files').find().toArray();
@@ -37,6 +41,7 @@ app.get('/files', async (req, res) => {
     }
 });
 
+// Download file
 app.get('/download/:id', async (req, res) => {
     try {
         const bucket = new GridFSBucket(db);
@@ -60,6 +65,7 @@ app.get('/download/:id', async (req, res) => {
     }
 });
 
+// Upload file
 app.post('/upload', upload.single('dataset'), async (req, res) => {
     try {
         if (!req.file) {
@@ -90,6 +96,7 @@ app.post('/upload', upload.single('dataset'), async (req, res) => {
     }
 });
 
+// Delete file
 app.delete('/delete/:id', async (req, res) => {
     try {
         const fileId = req.params.id;
@@ -112,6 +119,7 @@ app.delete('/delete/:id', async (req, res) => {
     }
 });
 
+// Start server
 connectToDatabase().then(() => {
     app.listen(PORT, () => {
         console.log(`Server is running on http://localhost:${PORT}`);
