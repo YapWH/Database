@@ -25,7 +25,7 @@ async function connectToDatabase() {
 // Serve static files
 app.use(express.static('public'));
 
-// Routessub
+// Load the main page
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'public.html'));
 });
@@ -75,10 +75,10 @@ app.post('/upload', upload.single('dataset'), async (req, res) => {
         const bucket = new GridFSBucket(db);
         const filename = req.file.originalname;
         const filepath = req.file.path;
-        const filedescription = req.body.filedescription;
-        const fileauthor = req.body.fileauthor;
-        const filedate = req.body.filedate;
-        const filetags = req.body.filetags;
+        // const filedescription = req.body.filedescription;
+        // const fileauthor = req.body.fileauthor;
+        // const filedate = req.body.filedate;
+        // const filetags = req.body.filetags;
 
         const uploadStream = bucket.openUploadStream(filename);
         const fileStream = fs.createReadStream(filepath);
