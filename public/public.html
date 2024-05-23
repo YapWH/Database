@@ -24,8 +24,8 @@
             <span class="close-button">&times;</span>
             <h2 class="black-label">Upload File</h2>
             <form id="uploadForm" enctype="multipart/form-data">
-                <label for="fileInput" class="black-label">Filename:</label>
-                <input type="text" id="fileInput" placeholder="Enter file name">
+                <label for="datasetNameInput" class="black-label">Dataset name:</label>
+                <input type="text" id="datasetNameInput" placeholder="Enter Dataset name">
                 <br>
                 <label for="descriptionInput" class="black-label">Description:</label>
                 <textarea id="descriptionInput" placeholder="Enter file description"></textarea>
@@ -118,8 +118,8 @@
                 fileDetailsModal.classList.add('file-details-modal');
                 const modalContent = `
                     <span class="close-button">&times;</span>
-                    <h2 class="black-label">File Details</h2>
-                    <p><strong>Filename:</strong> ${file.filename}</p>
+                    <h2 class="black-label">Dataset Details</h2>
+                    <p><strong>Dataset Name:</strong> ${file.datasetName}</p>
                     <p><strong>Description:</strong> ${file.description}</p>
                     <p><strong>File Size:</strong> ${file.size} KB</p>
                     <button onclick="window.location.href='/download/${file._id}'">Download</button>
