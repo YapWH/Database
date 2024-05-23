@@ -24,8 +24,8 @@
             <span class="close-button">&times;</span>
             <h2 class="black-label">Upload File</h2>
             <form id="uploadForm" enctype="multipart/form-data">
-                <label for="authorInput" class="black-label">Author:</label>
-                <input type="text" id="authorInput" placeholder="Enter author name">
+                <label for="fileInput" class="black-label">Filename:</label>
+                <input type="text" id="fileInput" placeholder="Enter file name">
                 <br>
                 <label for="descriptionInput" class="black-label">Description:</label>
                 <textarea id="descriptionInput" placeholder="Enter file description"></textarea>
@@ -119,7 +119,7 @@
                 const modalContent = `
                     <span class="close-button">&times;</span>
                     <h2 class="black-label">File Details</h2>
-                    <p><strong>Author:</strong> ${file.author}</p>
+                    <p><strong>Filename:</strong> ${file.filename}</p>
                     <p><strong>Description:</strong> ${file.description}</p>
                     <p><strong>File Size:</strong> ${file.size} KB</p>
                     <button onclick="window.location.href='/download/${file._id}'">Download</button>
